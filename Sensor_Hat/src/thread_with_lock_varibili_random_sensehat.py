@@ -64,9 +64,11 @@ tx = white
 # Visualizzazione messaggio scorrevole SenseHat
 sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
 
+# Avvio Thread di stampa a video
 stampa.start()
-while True:
-      print("Fine")
+for n in range(1, 6):
+      print("ciclo ", str(n))
+
 
 #thread3.start()
      
@@ -86,9 +88,7 @@ bg = black
 tx = red
 
 print("Fine")
-i = 5
 
-# Visualizzazione messaggio scorrevole SenseHat
-for i in range (1,10):
-      sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+
+
 
