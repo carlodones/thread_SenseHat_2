@@ -60,7 +60,7 @@ sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
       
 thread2.start()
 
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Umidità
+# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
 p = sense.get_pressure()
 
 # Arrotondamento ad una cifgra decimale
@@ -80,7 +80,7 @@ sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
       
 thread3.start()
 
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Umidità
+# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
 h = sense.get_humidity()
 
 # Arrotondamento ad una cifgra decimale
