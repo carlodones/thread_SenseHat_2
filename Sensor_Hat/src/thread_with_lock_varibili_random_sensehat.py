@@ -40,11 +40,11 @@ thread3 = MyThread("Thread#3", tempo3)
 # Avvio dei thread
 thread1.start()
 
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Umidità
+# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
 t = sense.get_temperature()
 
 # Arrotondamento ad una cifra decimale
-t = round(t, 3)
+t = round(t, 1)
 
 # str() conversione valori int in string per poterli concatenare 
 message = "Temperature: " + str(t) 
@@ -121,6 +121,6 @@ tx = red
 print("Fine")
 
 # Visualizzazione messaggio scorrevole SenseHat
-while true
+while True:
       sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
 
