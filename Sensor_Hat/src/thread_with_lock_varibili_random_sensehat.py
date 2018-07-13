@@ -62,14 +62,15 @@ stampa.start()
 for n in range(1, 6):
       print("ciclo ", str(n))
 
+
 #thread3.start()
 
-'''     
+     
 # Join
-sensori.join()
-stampa.join()
+#sensori.join()
+#stampa.join()
 #thread3.join()
-''' 
+
 
 # Fine dello script 
 
