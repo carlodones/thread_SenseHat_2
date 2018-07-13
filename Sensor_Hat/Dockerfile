@@ -1,4 +1,4 @@
-FROM resin/raspberry-pi3-debian:stretch
+FROM resin/raspberry-pi3-debian:jessie
 
 RUN apt-get update && apt-get install -yq \
    python sense-hat raspberrypi-bootloader && \
