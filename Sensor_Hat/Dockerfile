@@ -10,4 +10,4 @@ COPY . .
 
 ENV INITSYSTEM on
 
-CMD ["python", "/usr/src/app/src/thread.py"]
+CMD ["python", "/usr/src/app/src/thread_sense.py"]
