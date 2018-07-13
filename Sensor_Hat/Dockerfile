@@ -10,4 +10,4 @@ COPY . .
 
 ENV INITSYSTEM on
 
-CMD ["python", "/usr/src/app/src/thread_with_lock_varibili_random_sensehat.py"]
+CMD ["python", "/usr/src/app/src/thread.py"]
