@@ -4,8 +4,6 @@ from random import randint
 from sense_hat import SenseHat
 sense = SenseHat()
 
-# _*_ coding: utf-8 -*-
-
 # Define the colours red and green
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -42,7 +40,7 @@ thread3 = MyThread("Thread#3", tempo3)
 # Avvio dei thread
 thread1.start()
 
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidità
+# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
 t = sense.get_temperature()
 
 # Arrotondamento ad una cifra decimale
@@ -106,7 +104,7 @@ thread2.join()
 thread3.join()
 
 #Stampa variabili int random
-print ("il valore random per il primo thread è: '" + str(tempo1) + "' sec")
+print ("il valore random per il primo thread e': '" + str(tempo1) + "' sec")
 print ("il valore random per il primo thread e': '" + str(tempo2) + "' sec")
 print ("il valore random per il primo thread e': '" + str(tempo3) + "' sec")
 
