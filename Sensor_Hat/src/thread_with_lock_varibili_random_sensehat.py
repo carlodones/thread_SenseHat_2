@@ -22,11 +22,12 @@ class MyThread (threading.Thread):
       self.durata = durata
    def run(self):
       # Acquisizione del lock 
-      threadLock.acquire()
+      print ("Thread '" + self.name + "' avviato") 
+      # threadLock.acquire()
       time.sleep(self.durata)
       print ("Thread '" + self.name + "' terminato")
       # Rilascio del lock
-      threadLock.release()
+      # threadLock.release()
 
 # Definizione variabili
 tempo1 = 25
