@@ -22,7 +22,7 @@ class TestThread(threading.Thread):
         self.counter = counter
 
     def run(self):
-        time.sleep(self.durata)
+        time.sleep(self.counter)
         print("Starting " + self.name)
         if self.threadID == 1:
             acq_sensori(self.name, self.counter, 2)
