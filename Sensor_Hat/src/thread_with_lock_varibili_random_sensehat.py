@@ -39,84 +39,84 @@ thread3 = MyThread("Thread#3", tempo3)
  
 # Avvio dei thread
 thread1.start()
-while True:
-      # Take readings from all three sensors
-      t = sense.get_temperature()
-      p = sense.get_pressure()
-      h = sense.get_humidity()
+      while True:
+            # Take readings from all three sensors
+            t = sense.get_temperature()
+            p = sense.get_pressure()
+            h = sense.get_humidity()
 
-      # Round the values to one decimal place
-      t = round(t, 1)
-      p = round(p, 1)
-      h = round(h, 1)
+            # Round the values to one decimal place
+            t = round(t, 1)
+            p = round(p, 1)
+            h = round(h, 1)
 
-      # str() conversione valori int in string per poterli concatenare 
-      message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
-      
-      # background
-      bg = red
-      
-      # colore testo
-      tx = white
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            # str() conversione valori int in string per poterli concatenare 
+            message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
+            
+            # background
+            bg = red
+            
+            # colore testo
+            tx = white
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
 thread2.start()
-while True:
-      # Take readings from all three sensors
-      t = sense.get_temperature()
-      p = sense.get_pressure()
-      h = sense.get_humidity()
+      while True:
+            # Take readings from all three sensors
+            t = sense.get_temperature()
+            p = sense.get_pressure()
+            h = sense.get_humidity()
 
-      # Round the values to one decimal place
-      t = round(t, 1)
-      p = round(p, 1)
-      h = round(h, 1)
+            # Round the values to one decimal place
+            t = round(t, 1)
+            p = round(p, 1)
+            h = round(h, 1)
 
-      # str() conversione valori int in string per poterli concatenare 
-      message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
-      
-      # background
-      bg = red
-      
-      # colore testo
-      tx = white
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            # str() conversione valori int in string per poterli concatenare 
+            message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
+            
+            # background
+            bg = red
+            
+            # colore testo
+            tx = white
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
 
 thread3.start()
-while True:
-      # Take readings from all three sensors
-      t = sense.get_temperature()
-      p = sense.get_pressure()
-      h = sense.get_humidity()
+      while True:
+            # Take readings from all three sensors
+            t = sense.get_temperature()
+            p = sense.get_pressure()
+            h = sense.get_humidity()
 
-      # Round the values to one decimal place
-      t = round(t, 1)
-      p = round(p, 1)
-      h = round(h, 1)
+            # Round the values to one decimal place
+            t = round(t, 1)
+            p = round(p, 1)
+            h = round(h, 1)
 
-      # str() conversione valori int in string per poterli concatenare 
-      message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
-      
-      # background
-      bg = red
-      
-      # colore testo
-      tx = white
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
-      # Display the scrolling message
-      sense.show_message(messaggio, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            # str() conversione valori int in string per poterli concatenare 
+            message = "Temperature: " + str(t) + " Pressure: " + str(p) + " Humidity: " + str(h)
+            
+            # background
+            bg = red
+            
+            # colore testo
+            tx = white
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
+            
+            # Display the scrolling message
+            sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
       
 # Join
 thread1.join()
