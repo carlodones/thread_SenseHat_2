@@ -1,8 +1,9 @@
 #Sviluppo gestione multidocker
 Fase di test di con struttura multicontainer per acquisizione attraverso thread
-Creazione ed avvio di diversi thread:
+
+#Creazione ed avvio di diversi thread:
 -definizione classe "MyThread" che eredita dalla classe Thread 
--scopo visualizzare un messaggio su SenseHat che riporti le differenti durate dei thread eseguiti.
+-scopo visualizzare un messaggio su SenseHat che riporti i dati acquisiti da ogni thread: il primo temperatura, il secondo pressione, il terzo umidità.
 
 #Jessie packages
 
