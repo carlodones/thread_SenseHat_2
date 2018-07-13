@@ -5,6 +5,9 @@ Fase di test di con struttura multicontainer per acquisizione attraverso thread
 -definizione classe "MyThread" che eredita dalla classe Thread 
 -scopo visualizzare un messaggio su SenseHat che riporti i dati acquisiti da ogni thread: il primo temperatura, il secondo pressione, il terzo umidità.
 
+#Sblocco thread
+ogni thread stampa un valore specifico
+
 #Jessie packages
 
 https://packages.debian.org/jessie/python/
