@@ -10,6 +10,7 @@ green = (0, 255, 0)
 black = (0,0,0)
 orange = (255, 255, 0)
 white = (255,255,255)
+blue = (0, 0, 255)
 
 # Definizione del lock per sincronizzazione e avvio sequenziale
 threadLock = threading.Lock()
@@ -90,7 +91,7 @@ h = round(h, 1)
 message = " Humidity: " + str(h)
       
 # background
-bg = orange
+bg = blue
       
 # colore testo
 tx = white
