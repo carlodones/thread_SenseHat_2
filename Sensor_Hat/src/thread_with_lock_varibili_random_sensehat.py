@@ -27,7 +27,7 @@ class MyThread (threading.Thread):
       time.sleep(self.durata)
       print ("Thread '" + self.name + "' terminato")
       # Rilascio del lock
-      threadLock.release()
+      threadLock.release(False)
 
 # Definizione variabili
 tempo1 = 100
