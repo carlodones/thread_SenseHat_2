@@ -23,7 +23,7 @@ class MyThread (threading.Thread):
    def run(self):
       # Acquisizione del lock 
       print ("Thread '" + self.name + "' avviato") 
-      threadLock.acquire(True)
+      threadLock.acquire(False)
       time.sleep(self.durata)
       print ("Thread '" + self.name + "' terminato")
       # Rilascio del lock
