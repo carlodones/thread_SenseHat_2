@@ -30,26 +30,30 @@ class MyThread (threading.Thread):
       # threadLock.release()
 
 # Definizione variabili
-tempo1 = 25
-tempo2 = 25
-tempo3 = 25
+tempo1 = 100
+tempo2 = 100
+# tempo3 = 25
 
 # Creazione dei thread
-thread1 = MyThread("Thread#1", tempo1)
-thread2 = MyThread("Thread#2", tempo2)
-thread3 = MyThread("Thread#3", tempo3)
+sensori = MyThread("Thread#1", tempo1)
+stampa = MyThread("Thread#2", tempo2)
+# thread3 = MyThread("Thread#3", tempo3)
  
 # Avvio dei thread
-thread1.start()
+sensori.start() 
 
 # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
 t = sense.get_temperature()
+p = sense.get_pressure()
+h = sense.get_humidity()
 
 # Arrotondamento ad una cifra decimale
 t = round(t, 1)
+p = round(p, 1)
+h = round(h, 1)
 
 # str() conversione valori int in string per poterli concatenare 
-message = "Temperature: " + str(t) 
+message = "Temperature: " + str(t) + "Pressure: " + str(p) + "Humidity: " + str(h)
 
 # background
 bg = red
@@ -59,56 +63,17 @@ tx = white
       
 # Visualizzazione messaggio scorrevole SenseHat
 sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
-thread2.start()
 
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
-p = sense.get_pressure()
+stampa.start()
+while True:
+      print("Fine")
 
-# Arrotondamento ad una cifgra decimale
-p = round(p, 1)
-
-# str() conversione valori int in string per poterli concatenare 
-message = " Pressure: " + str(p) 
-
-# background
-bg = green
-      
-# colore testo
-tx = white
-      
-# Visualizzazione messaggio scorrevole SenseHat
-sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
-thread3.start()
-
-# Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
-h = sense.get_humidity()
-
-# Arrotondamento ad una cifgra decimale
-h = round(h, 1)
-
-# str() conversione valori int in string per poterli concatenare 
-message = " Humidity: " + str(h)
-      
-# background
-bg = blue
-      
-# colore testo
-tx = white
-      
-# Visualizzazione messaggio scorrevole SenseHat
-sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
-      
+#thread3.start()
+     
 # Join
-thread1.join()
-thread2.join()
-thread3.join()
-
-#Stampa variabili int random
-print ("il valore random per il primo thread e': '" + str(tempo1) + "' sec")
-print ("il valore random per il primo thread e': '" + str(tempo2) + "' sec")
-print ("il valore random per il primo thread e': '" + str(tempo3) + "' sec")
+sensori.join()
+stampa.join()
+#thread3.join()
 
 # Fine dello script 
 
