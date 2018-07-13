@@ -86,8 +86,9 @@ bg = black
 tx = red
 
 print("Fine")
+i = 5
 
 # Visualizzazione messaggio scorrevole SenseHat
-while True:
+for i in range (1,10):
       sense.show_message(message, text_colour=tx, scroll_speed=0.250, back_colour=bg)
 
