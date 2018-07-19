@@ -18,8 +18,8 @@ exitFlag = 0
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 
-MaxTemp = 28
-MinTemp = 23
+MaxTemp = 40
+MinTemp = 20
 
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
@@ -37,13 +37,13 @@ class TestThread(threading.Thread):
         time.sleep(self.counter)
         print("Starting " + self.name)
         if self.threadID == 1:
-            acq_sensori(self.name, self.counter, 2)
+            acq_sensori(self.name, 1, self.counter)
         
         if self.threadID == 2:
-            print_time(self.name, self.counter, 50)
+            print_time(self.name, 1, self.counter)
 
         if self.threadID == 3:
-            print_counter(self.name, self.counter, 50)
+            print_counter(self.name, 1, self.counter)
 
 #  DEFINIZIONE  THREAD  ID = 1
 #  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
@@ -52,12 +52,6 @@ def acq_sensori(threadName, delay, counter):
         if exitFlag:
             threadName.exit()
         time.sleep(delay)
-        
-        # background
-        bg = red
-        
-        # colore testo
-        tx = white
 
         # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
         t = sense.get_temperature()
@@ -65,13 +59,10 @@ def acq_sensori(threadName, delay, counter):
         # Arrotondamento ad una cifra decimale
         t = round(t, 1)
 
-        # str() conversione valori int in string per poterli concatenare 
-        message = "Temperature: " + str(t)
-
+        # Coloro il display in funzione della T rilevata
         show_temperature(t)
 
-        # Visualizzazione messaggio scorrevole SenseHat
-        # sense.show_message(message, text_colour=tx, scroll_speed=0.50, back_colour=bg)
+        counter -= 1
 
 #  DEFINIZIONE  THREAD  ID = 2
 #  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
@@ -103,9 +94,9 @@ def show_temperature(temp_value):
 
 
 # Create new threads
-thread1 = TestThread(1, "Thread 1", 1000)
-thread2 = TestThread(2, "Thread 2", 1000)
-thread3 = TestThread(3, "Thread 3", 1000)
+thread1 = TestThread(1, "Thread 1", 50)
+thread2 = TestThread(2, "Thread 2", 50)
+thread3 = TestThread(3, "Thread 3", 50)
 
 # Start new Threads
 thread1.start()
