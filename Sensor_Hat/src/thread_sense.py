@@ -18,8 +18,8 @@ exitFlag = 0
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 
-MaxTemp = 35
-MinTemp = 37
+MaxTemp = 38
+MinTemp = 35
 
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
