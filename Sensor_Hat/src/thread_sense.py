@@ -92,7 +92,7 @@ def print_counter(threadName, delay, counter):
         print(threadName, "ciclo", str(counter))
         counter -= 1
 
-def show_temperature(temp_value)
+def show_temperature(temp_value):
     for vp in VertPixels
         for hp in HorzPixels
             dist_from_center = math.sqrt((vp - 3.5)*(vp - 3.5) + (hp - 3.5)*(hp - 3.5))
