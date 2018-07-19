@@ -1,5 +1,6 @@
 import threading
 import time
+import math
 from random import randint
 from sense_hat import SenseHat, ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 sense = SenseHat()
@@ -93,8 +94,8 @@ def print_counter(threadName, delay, counter):
         counter -= 1
 
 def show_temperature(temp_value):
-    for vp in VertPixels
-        for hp in HorzPixels
+    for vp in VertPixels:
+        for hp in HorzPixels:
             dist_from_center = math.sqrt((vp - 3.5)*(vp - 3.5) + (hp - 3.5)*(hp - 3.5))
             pixel_temp = temp_value * (3.5 - dist_from_center)
             pixel_light = ((pixel_temp - MinTemp) / (MaxTemp - MinTemp)) * 255
