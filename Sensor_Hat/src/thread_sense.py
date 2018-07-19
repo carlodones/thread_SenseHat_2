@@ -93,7 +93,7 @@ def show_temperature(temp_value):
     for vp in VertPixels:
         for hp in HorzPixels:
             dist_from_center = math.sqrt((vp - 3.5)*(vp - 3.5) + (hp - 3.5)*(hp - 3.5))
-            pixel_temp = temp_value * (3.5 - dist_from_center)
+            pixel_temp = MinTemp + (temp_value * (5 - dist_from_center))
             pixel_light = int( (((pixel_temp - MinTemp) / (MaxTemp - MinTemp)) * 255) // 1)
             print("<" + str(pixel_light) + ">")
             sense.set_pixel(hp, vp, pixel_light, pixel_light, pixel_light)
