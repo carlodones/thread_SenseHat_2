@@ -60,7 +60,7 @@ def acq_sensori(threadName, delay, counter):
         # Arrotondamento ad una cifra decimale
         t = round(t, 1)
 
-        print("Temperatura: <" + t + ">")
+        print("Temperatura: <" + str(t) + ">")
 
         # Coloro il display in funzione della T rilevata
         show_temperature(t)
