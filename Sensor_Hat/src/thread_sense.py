@@ -18,8 +18,8 @@ exitFlag = 0
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 
-MaxTemp = 40
-MinTemp = 20
+MaxTemp = 35
+MinTemp = 37
 
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
@@ -91,6 +91,10 @@ def print_counter(threadName, delay, counter):
 
 def show_temperature(temp_value):
     pixel_light = int( (((temp_value - MinTemp) / (MaxTemp - MinTemp)) * 255) // 1)
+    if (pixel_light > 255):
+        pixel_light = 255
+    if (pixel_light < 0):
+        pixel_light = 0
     print("<" + str(pixel_light) + ">")
     for vp in VertPixels:
         for hp in HorzPixels:
