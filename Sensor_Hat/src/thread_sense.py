@@ -24,6 +24,23 @@ VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 
 
+X = [255, 0, 0]  # Red
+O = [255, 255, 255]  # White
+
+alt_sign = [
+O, O, O, O, O, O, O, O,
+O, O, O, O, X, O, X, O,
+X, X, O, O, X, O, X, X,
+O, O, X, O, X, O, X, O,
+O, X, X, O, X, O, X, O,
+X, O, X, O, X, O, X, O,
+X, X, X, O, X, O, O, X,
+O, O, O, O, O, O, O, O
+]
+
+sense.set_pixels(question_mark)
+
+
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
         exitFlag = 1
@@ -73,6 +90,7 @@ def acq_sensori(threadName, delay, counter):
     while counter:
         if exitFlag:
             threadName.exit()
+            sense.set_pixels(alt_sign)
         time.sleep(delay)
 
         # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
