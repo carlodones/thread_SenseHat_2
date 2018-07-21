@@ -42,7 +42,7 @@ class TestThread(threading.Thread):
         avg_temp = 0
         calib = 1
 
-        while (calib < calib_cycles):
+        while (calib <= calib_cycles):
             avg_temp = avg_temp + sense.get_temperature()
             print ("Calibration [" + str(calib) + "]: <" + str(avg_temp / calib) + ">")
             calib = calib + 1
@@ -51,8 +51,8 @@ class TestThread(threading.Thread):
         avg_temp = avg_temp / calib_cycles
         print ("Avg: <" + str(avg_temp)+ ">")
 
-        max_temp = avg_temp + 1
-        min_temp = avg_temp - 1
+        max_temp = avg_temp + 2
+        min_temp = avg_temp - 2
         print ("Min: <" + str(min_temp)+ ">; Max: <" +str(max_temp)+ ">")
 
 
