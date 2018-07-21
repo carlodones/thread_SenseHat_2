@@ -38,7 +38,7 @@ X, X, X, O, X, O, O, X,
 O, O, O, O, O, O, O, O
 ]
 
-sense.set_pixels(question_mark)
+sense.set_pixels(alt_sign)
 
 
 def pushed_middle(event):
