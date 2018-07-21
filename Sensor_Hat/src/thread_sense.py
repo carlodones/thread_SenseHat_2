@@ -18,6 +18,7 @@ calib = 0
 max_temp = 100
 min_temp = 0
 avg_temp = 0
+calib_cycles = 5
 
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -41,13 +42,13 @@ class TestThread(threading.Thread):
         avg_temp = 0
         calib = 1
 
-        while (calib < 5):
+        while (calib < calib_cycles):
             avg_temp = avg_temp + sense.get_temperature()
             print ("Calibration [" + str(calib) + "]: <" + str(avg_temp / calib) + ">")
             calib = calib + 1
             time.sleep(1)
 
-        avg_temp = avg_temp / calib
+        avg_temp = avg_temp / calib_cycles
         print ("Avg: <" + str(avg_temp)+ ">")
 
         max_temp = avg_temp + 1
