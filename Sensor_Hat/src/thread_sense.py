@@ -18,8 +18,6 @@ exitFlag = 0
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 
-MaxTemp = 38
-MinTemp = 35
 
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
@@ -34,7 +32,19 @@ class TestThread(threading.Thread):
         self.counter = counter
 
     def run(self):
-        time.sleep(self.counter)
+        print("Checking temp " + self.name)
+
+        while (calib < 5):
+            avg_temp = avg_temp + sense.get_temperature()
+            print ("Calibration: <" + str(avg_temp / calib)+ ">")
+            time.sleep(1)
+
+        avg_temp = avg_temp / calib
+        MaxTemp = avg_temp + 2
+        MinTemp = avg_temp - 2
+        print ("Min: <" + str(MinTemp)+ ">; Max: <" +str(MaxTemp)+ ">")
+
+
         print("Starting " + self.name)
         if self.threadID == 1:
             acq_sensori(self.name, 1, self.counter)
@@ -59,8 +69,6 @@ def acq_sensori(threadName, delay, counter):
 
         # Arrotondamento ad una cifra decimale
         t = round(t, 1)
-
-        print("Temperatura: <" + str(t) + ">")
 
         # Coloro il display in funzione della T rilevata
         show_temperature(t)
@@ -95,7 +103,6 @@ def show_temperature(temp_value):
         pixel_light = 255
     if (pixel_light < 0):
         pixel_light = 0
-    print("<" + str(pixel_light) + ">")
     for vp in VertPixels:
         for hp in HorzPixels:
             # dist_from_center = math.sqrt((vp - 3.5)*(vp - 3.5) + (hp - 3.5)*(hp - 3.5))
@@ -104,7 +111,7 @@ def show_temperature(temp_value):
 
 
 # Create new threads
-thread1 = TestThread(1, "Thread 1", 50)
+thread1 = TestThread(1, "Thread 1", 1000)
 # thread2 = TestThread(2, "Thread 2", 50)
 # thread3 = TestThread(3, "Thread 3", 50)
 
