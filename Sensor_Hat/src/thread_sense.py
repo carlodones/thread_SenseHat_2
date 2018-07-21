@@ -16,8 +16,8 @@ blue = (0, 0, 255)
 exitFlag = 0
 calib = 0
 max_temp = 100
-min_temp = 100
-avg_temp = 50
+min_temp = 0
+avg_temp = 0
 
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -36,7 +36,8 @@ class TestThread(threading.Thread):
         self.counter = counter
 
     def run(self):
-        print("Checking temp " + self.name)
+        print("Calibrating " + self.name)
+        avg_temp = 0
 
         while (calib < 5):
             avg_temp = avg_temp + sense.get_temperature()
