@@ -14,6 +14,10 @@ white = (255,255,255)
 blue = (0, 0, 255)
 
 exitFlag = 0
+calib = 0
+max_temp = 100
+min_temp = 100
+avg_temp = 50
 
 VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
 HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -40,9 +44,9 @@ class TestThread(threading.Thread):
             time.sleep(1)
 
         avg_temp = avg_temp / calib
-        MaxTemp = avg_temp + 2
-        MinTemp = avg_temp - 2
-        print ("Min: <" + str(MinTemp)+ ">; Max: <" +str(MaxTemp)+ ">")
+        max_temp = avg_temp + 2
+        min_temp = avg_temp - 2
+        print ("Min: <" + str(min_temp)+ ">; Max: <" +str(max_temp)+ ">")
 
 
         print("Starting " + self.name)
@@ -98,7 +102,7 @@ def print_counter(threadName, delay, counter):
 """
 
 def show_temperature(temp_value):
-    pixel_light = int( (((temp_value - MinTemp) / (MaxTemp - MinTemp)) * 255) // 1)
+    pixel_light = int( (((temp_value - min_temp) / (max_temp - min_temp)) * 255) // 1)
     if (pixel_light > 255):
         pixel_light = 255
     if (pixel_light < 0):
@@ -106,7 +110,7 @@ def show_temperature(temp_value):
     for vp in VertPixels:
         for hp in HorzPixels:
             # dist_from_center = math.sqrt((vp - 3.5)*(vp - 3.5) + (hp - 3.5)*(hp - 3.5))
-            # pixel_temp = MinTemp + (temp_value * (5 - dist_from_center))
+            # pixel_temp = min_temp + (temp_value * (5 - dist_from_center))
             sense.set_pixel(hp, vp, pixel_light, pixel_light, pixel_light)
 
 
