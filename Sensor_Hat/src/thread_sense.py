@@ -37,11 +37,14 @@ class TestThread(threading.Thread):
 
     def run(self):
         print("Calibrating " + self.name)
+
         avg_temp = 0
+        calib = 1
 
         while (calib < 5):
             avg_temp = avg_temp + sense.get_temperature()
             print ("Calibration: <" + str(avg_temp / calib)+ ">")
+            calib = calib + 1
             time.sleep(1)
 
         avg_temp = avg_temp / calib
