@@ -43,19 +43,21 @@ class TestThread(threading.Thread):
 
         while (calib < 5):
             avg_temp = avg_temp + sense.get_temperature()
-            print ("Calibration: <" + str(avg_temp / calib)+ ">")
+            print ("Calibration [" + str(calib) + "]: <" + str(avg_temp / calib) + ">")
             calib = calib + 1
             time.sleep(1)
 
         avg_temp = avg_temp / calib
-        max_temp = avg_temp + 2
-        min_temp = avg_temp - 2
+        print ("Avg: <" + str(avg_temp)+ ">")
+
+        max_temp = avg_temp + 1
+        min_temp = avg_temp - 1
         print ("Min: <" + str(min_temp)+ ">; Max: <" +str(max_temp)+ ">")
 
 
         print("Starting " + self.name)
         if self.threadID == 1:
-            acq_sensori(self.name, 1, self.counter)
+            acq_sensori(self.name, 0.1, self.counter)
 """        
         if self.threadID == 2:
             print_time(self.name, 1, self.counter)
@@ -77,6 +79,8 @@ def acq_sensori(threadName, delay, counter):
 
         # Arrotondamento ad una cifra decimale
         t = round(t, 1)
+
+        print ("Temp: <" + str(t)+ ">")
 
         # Coloro il display in funzione della T rilevata
         show_temperature(t)
