@@ -95,7 +95,7 @@ class TestThread(threading.Thread):
 
     def show_temperature(self, temp_value):
 
-        X = 0
+        X = [0, 0, 0]
 
         one_level = [
         X, X, X, X, X, X, X, X,
