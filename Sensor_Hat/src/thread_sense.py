@@ -105,7 +105,7 @@ class TestThread(threading.Thread):
         X, X, X, X, X, X, X, X,
         X, X, X, X, X, X, X, X,
         X, X, X, X, X, X, X, X,
-        X, X, X, X, X, X, X, X,
+        X, X, X, X, X, X, X, X
         ]
         
         pixel_light = int( (((temp_value - self.min_temp) / (self.max_temp - self.min_temp)) * 255) // 1)
