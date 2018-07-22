@@ -13,14 +13,10 @@ orange = (255, 255, 0)
 white = (255,255,255)
 blue = (0, 0, 255)
 
-exitFlag = 0
+exit_flag = 0
 max_temp = 100
 min_temp = 0
 calib_cycles = 5
-
-VertPixels = [0, 1, 2, 3, 4, 5, 6, 7]
-HorzPixels = [0, 1, 2, 3, 4, 5, 6, 7]
-
 
 X = [255, 0, 0]  # Red
 O = [0, 0, 0]  # Black
@@ -36,12 +32,10 @@ O, O, X, O, O, X, O, O,
 O, O, O, X, X, O, O, O
 ]
 
-sense.set_pixels(alt_sign)
-
 
 def pushed_middle(event):
     if event.action != ACTION_RELEASED:
-        self.exitFlag = 1
+        event.exit_flag = 1
         print("exit")
 
 class TestThread(threading.Thread):
@@ -87,7 +81,7 @@ class TestThread(threading.Thread):
 #  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
 def acq_sensori(threadName, delay, counter):
     while counter:
-        if (exitFlag == 1):
+        if (threadName.exit_flag == 1):
             sense.set_pixels(alt_sign)
             threadName.exit()
 
@@ -111,7 +105,7 @@ def acq_sensori(threadName, delay, counter):
 #  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
 def print_time(threadName, delay, counter):
     while counter:
-        if exitFlag:
+        if exit_flag:
             threadName.exit()
         time.sleep(delay)
         print("%s: %s" % (threadName, time.ctime(time.time())))
@@ -121,7 +115,7 @@ def print_time(threadName, delay, counter):
 #  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
 def print_counter(threadName, delay, counter):
     while counter:
-        if exitFlag:
+        if exit_flag:
             threadName.exit()
         time.sleep(delay)
         print(threadName, "ciclo", str(counter))
