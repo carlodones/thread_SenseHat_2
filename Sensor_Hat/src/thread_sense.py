@@ -32,7 +32,7 @@ exit_flag = (0)
 def pushed_middle(event):
     global exit_flag
     if event.action == ACTION_PRESSED:
-        print("Button pressed " + self.name)
+        print("Button pressed")
         exit_flag = 1
         
 
