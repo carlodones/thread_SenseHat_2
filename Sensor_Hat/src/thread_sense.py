@@ -95,7 +95,13 @@ class TestThread(threading.Thread):
 
     def show_temperature(self, temp_value):
 
-        X = [0, 0, 0]
+        pixel_light = int( (((temp_value - self.min_temp) / (self.max_temp - self.min_temp)) * 255) // 1)
+        if (pixel_light > 255):
+            pixel_light = 255
+        if (pixel_light < 0):
+            pixel_light = 0
+
+        X = [pixel_light, pixel_light, pixel_light]
 
         one_level = [
         X, X, X, X, X, X, X, X,
@@ -108,14 +114,6 @@ class TestThread(threading.Thread):
         X, X, X, X, X, X, X, X
         ]
         
-        pixel_light = int( (((temp_value - self.min_temp) / (self.max_temp - self.min_temp)) * 255) // 1)
-        if (pixel_light > 255):
-            pixel_light = 255
-        if (pixel_light < 0):
-            pixel_light = 0
-
-        X = [pixel_light, pixel_light, pixel_light]
-
         sense.set_pixels(one_level)
 
 
