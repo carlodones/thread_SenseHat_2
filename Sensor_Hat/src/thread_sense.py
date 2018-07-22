@@ -27,11 +27,16 @@ O, O, X, O, O, X, O, O,
 O, O, O, X, X, O, O, O
 ]
 
+exit_flag = (0)
 
+def pushed_middle(event):
+    global exit_flag
+    if event.action == ACTION_PRESSED:
+        exit_flag = 1
+        
 
 class TestThread(threading.Thread):
 
-    exit_flag = 0
     max_temp = 100
     min_temp = 0
     calib_cycles = 5
@@ -42,11 +47,6 @@ class TestThread(threading.Thread):
         self.name = name
         self.counter = counter
 
-    def pushed_middle(self, event):
-        if event.action != ACTION_RELEASED:
-            self.exit_flag = 1
-            print("exit")
-            
     def run(self):
 
         avg_temp = 0
@@ -73,8 +73,11 @@ class TestThread(threading.Thread):
             self.acq_sensori(self.name, 0.5, self.counter)
 
     def acq_sensori(self, threadName, delay, counter):
+
+        global exit_flag
+
         while counter:
-            if (self.exit_flag == 1):
+            if (exit_flag == 1):
                 print("Ending " + self.name)
                 sense.set_pixels(alt_sign)
                 threadName.exit()
@@ -91,6 +94,8 @@ class TestThread(threading.Thread):
             self.show_temperature(t)
 
             counter -= 1
+
+        sense.set_pixels(alt_sign)
 
 
     def show_temperature(self, temp_value):
