@@ -74,7 +74,7 @@ class TestThread(threading.Thread):
 
     def acq_sensori(self, threadName, delay, counter):
         while counter:
-            if (threadName.exit_flag == 1):
+            if (self.exit_flag == 1):
                 print("Ending " + self.name)
                 sense.set_pixels(alt_sign)
                 threadName.exit()
