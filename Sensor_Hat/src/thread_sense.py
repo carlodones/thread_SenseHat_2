@@ -255,7 +255,9 @@ class StartThread(threading.Thread):
 
             print("")
             print("************************")
-            print(str(json.dumps(main_dic)))
+            print(str(json.dumps(main_dic,
+                      indent=4, sort_keys=True,
+                      separators=(',', ': '), ensure_ascii=False)))
 
             # Coloro il display in funzione della media rilevata
             self.show_temperature(meas.value)
