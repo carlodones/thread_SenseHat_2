@@ -9,7 +9,8 @@ sense = SenseHat()
 G = [0, 127, 0]  # Green
 R = [127, 0, 0]  # Red
 
-channels = (1, 2)
+# Array dei canali 
+channels = [1, 2]
 
 # Segno verde: visualizzato al termine del programma
 green_sign = [
@@ -33,6 +34,17 @@ def pushed_middle(event):
         print("Button pressed")
         exit_flag = 1
 
+# Classe contenente le chiavi per la creazione del JSON
+class KeysConstant(object):
+    def __init__(self):
+        pass    
+
+    key_payload = "payload"
+    key_address = "address"
+    key_qos = "qos"
+    key_values = "values"
+    key_timestamp = "timestampDevice"
+
 # Classe per la memorizzazione di una singola misura
 class Measure(object):
     def __init__(self, channel, value, timestamp, count=1):
@@ -43,16 +55,6 @@ class Measure(object):
         self.average = 0
         self.json = 0
         self.count = count
-
-class KeysConstant(object):
-    def __init__(self):
-        pass    
-
-    key_payload = "payload"
-    key_address = "address"
-    key_qos = "qos"
-    key_values = "values"
-    key_timestamp = "timestampDevice"
 
 # Classe per la gestione delle liste misura
 class MeasureList(object):
