@@ -201,7 +201,7 @@ class StartThread(threading.Thread):
             # Se ho premuto il pulsante, esco e visualizzo
             # il segno verde
             if (exit_flag == 1):
-                threadName.exit()
+                counter = 0
 
             # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
             t = sense.get_temperature()
@@ -236,7 +236,7 @@ class StartThread(threading.Thread):
             # Se ho premuto il pulsante, esco e visualizzo
             # il segno verde
             if (exit_flag == 1):
-                threadName.exit()
+                counter = 0
 
             # Genero le medie per le grandezze rilevate
             for ch in channels:
@@ -308,7 +308,7 @@ calib_temp = Calibration("SenseHat-Temp")
 measure_list = MeasureList()
 
 # Create new threads
-th_acquisition = StartThread(1, "Acquisition", 5, 500)
+th_acquisition = StartThread(1, "Acquisition", 2, 500)
 th_process = StartThread(2, "Process", 20, 50)
 
 # Start new Threads
