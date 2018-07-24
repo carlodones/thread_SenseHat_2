@@ -45,7 +45,7 @@ class Calibration():
     def __init__(self, name, pcycles=5, pmin=0, pmax=100):
         self.name = name
         self.pcycles = pcycles
-        self.min = pmin
+        self.pmin = pmin
         self.pmax = pmax
 
     def calibrate(self):
