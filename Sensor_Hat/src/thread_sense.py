@@ -1,12 +1,15 @@
 import threading
 import time
 import math
+import json
 from random import randint
 from sense_hat import SenseHat, ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 sense = SenseHat()
 
 G = [0, 127, 0]  # Green
 R = [127, 0, 0]  # Red
+
+channels = (1, 2)
 
 # Segno verde: visualizzato al termine del programma
 green_sign = [
@@ -30,18 +33,111 @@ def pushed_middle(event):
         print("Button pressed")
         exit_flag = 1
 
+# Classe per la memorizzazione di una singola misura
 class Measure(object):
-    def __init__(self, channel, value, timestamp, processed):
+    def __init__(self, channel, value, timestamp, count=1):
         self.channel = channel
         self.value = value
         self.timestamp = timestamp
-        self.processed = processed
+        self.read = 0
+        self.average = 0
+        self.json = 0
+        self.count = count
+
+class KeysConstant(object):
+    def __init__(self):
+        pass    
+
+    key_payload = "payload"
+    key_address = "address"
+    key_qos = "qos"
+    key_values = "values"
+    key_timestamp = "timestampDevice"
+
+# Classe per la gestione delle liste misura
+class MeasureList(object):
+    def __init__(self):
+        pass
+
+    global kc
+    plist = []
+
+    # Aggiunge alla lista una misura dati i valori
+    def add_details(self, channel, value, timestamp):
+        meas = Measure(channel, value, timestamp)
+        self.plist.append(meas)
+
+    # Aggiunge alla lista una misura
+    def add_measure(self, meas):
+        self.plist.append(meas)
+
+    # Ritorna lista delle misure per singolo canale
+    def list_by_channel(self, channel):
+        part_list = []
+        for meas in self.plist:
+            if ((meas.channel == channel) & (meas.read == 0)):
+                part_list.append(meas)
+                meas.read = 1
+        return part_list
+
+    # Ritorna lista delle misure per singolo canale e stato
+    def json_dictionary(self):
+        dic_list = []
+        for meas in self.plist:
+            elem_dic = {}
+            if (meas.json == 0):
+                elem_dic[kc.key_payload] = meas.value
+                elem_dic[kc.key_address] = meas.channel
+                elem_dic[kc.key_timestamp] = meas.timestamp
+                elem_dic[kc.key_qos] = "good"
+                dic_list.append(elem_dic)
+                meas.json = 1
+        return dic_list
+
+    # Ritorna media delle misure per singolo canale e stato
+    def avg_by_channel(self, channel):
+
+        # Numero misure contate
+        val_count = 0
+        val_tot = 0
+        val_ts = 0
+        val_avg = 0
+
+        # Estraggo le misure e calcolo la media
+        for meas in self.plist:
+            if ((meas.channel == channel) & (meas.average == 0)):
+                if (val_ts == 0):
+                    val_ts = meas.timestamp
+                val_count = val_count + 1
+                val_tot = val_tot + meas.value
+                meas.average = 1
+
+        # Calcolo la media delle ultime misure
+        if (val_count > 0):
+            val_avg = val_tot / val_count
+        else:
+            val_avg = 0
+
+        meas_avg = Measure(channel, val_avg, val_ts, val_count)
+
+        return meas_avg
+
+    # Elimina gli elementi processati
+    def clear_list(self):
+        for meas in self.plist:
+            if (meas.json == 1):
+                self.plist.remove(meas)
+
+    # Ritorna la lista completa
+    def list(self):
+        return self.plist
+
 
 # Classe per eseguire la calibrazione iniziale
-class Calibration():
+class Calibration(object):
 
-    def __init__(self, name, pcycles=5, pmin=0, pmax=100):
-        self.name = name
+    def __init__(self, sensor, pcycles=5, pmin=0, pmax=100):
+        self.sensor = sensor
         self.pcycles = pcycles
         self.pmin = pmin
         self.pmax = pmax
@@ -53,7 +149,7 @@ class Calibration():
 
         # Avvio fase di calibrazione iniziale: la temperatura media risulta
         # da una media di 5 rilevazioni della temperatura ambiente
-        print("Calibrating " + self.name)
+        print("Calibrating Sensor: <" + self.sensor + ">")
 
         while (calib <= self.pcycles):
             avg_temp = avg_temp + sense.get_temperature()
@@ -70,6 +166,7 @@ class Calibration():
         self.pmin = avg_temp - 1
         print ("Min: <" + str(self.pmin)+ ">; Max: <" +str(self.pmax)+ ">")
 
+# Classe per l'avvio dei thread
 class StartThread(threading.Thread):
 
     def __init__(self, threadID, name, delay, counter):
@@ -84,13 +181,13 @@ class StartThread(threading.Thread):
         # Avvio il thread di acquisizione
         print("Starting " + self.name)
         if self.threadID == 1:
-            self.read_sesors(self.name, self.delay, self.counter)
+            self.read_sensors(self.name, self.delay, self.counter)
         if self.threadID == 2:
             self.parse_measures(self.name, self.delay, self.counter)
         print("Started " + self.name)
 
     # Thread per la lettura dei sensori
-    def read_sesors(self, threadName, delay, counter):
+    def read_sensors(self, threadName, delay, counter):
 
         global exit_flag
         global measure_list
@@ -106,17 +203,18 @@ class StartThread(threading.Thread):
 
             # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
             t = sense.get_temperature()
+            p = sense.get_humidity()
 
             # Arrotondamento ad una cifra decimale
             t = round(t, 2)
+            p = round(p, 2)
 
             # Rilevo il timestamp
             ts = time.time()
 
-            mis = Measure(1, t, ts, 0)
-
             # Aggiungo alla lista misure
-            measure_list.append(mis)
+            measure_list.add_details(1, t, ts)
+            measure_list.add_details(2, p, ts)
 
             time.sleep(delay)
 
@@ -127,6 +225,7 @@ class StartThread(threading.Thread):
 
         global exit_flag
         global measure_list
+        global kc
 
         while counter:
             # Verifico se ho premuto il pulsante di stop
@@ -137,44 +236,41 @@ class StartThread(threading.Thread):
             if (exit_flag == 1):
                 threadName.exit()
 
-            # Numero misure contate
-            val_count = 0
-            val_tot = 0
-            val_ts = 0
-            val_avg = 0
+            # Genero le medie per le grandezze rilevate
+            for ch in channels:
+                meas = measure_list.avg_by_channel(ch)
 
-            # Estraggo le misure e calcolo la media
-            for mis in measure_list:
-                if (mis.processed == 1):
-                    measure_list.remove(mis)
-                else:
-                    if (val_ts == 0):                    
-                        val_ts = mis.timestamp
-                    val_count = val_count + 1
-                    val_tot = val_tot + mis.value
-                    mis.processed = 1
+                # Stampo il valore della media
+                print("TS: <" + str(meas.timestamp) + ">; NUM:<" + str(meas.count)+ ">; AVG:<" + str(meas.value)+ ">")
 
-            if (val_count > 0):
-                val_avg = val_tot / val_count
-            else:
-                val_avg = 0
+                # Aggiorno il codice canale e aggiungo la media alla lista misure
+                meas.channel = meas.channel + 10
+                measure_list.add_measure(meas)
 
-            # Stampo il valore della media
-            print("TS: <" + str(val_ts) + ">; NUM:<" + str(val_count)+ ">; AVG:<" + str(val_avg)+ ">")
+            # Genero il JSON
+            main_dic = {}
+            main_dic[kc.key_timestamp] = time.time()
+            main_dic[kc.key_qos] = "good"
+            main_dic[kc.key_values] = measure_list.json_dictionary()
+
+            print("")
+            print("************************")
+            print(str(json.dumps(main_dic)))
 
             # Coloro il display in funzione della media rilevata
-            self.show_temperature(val_avg)
+            self.show_temperature(meas.value)
 
             time.sleep(delay)
 
             counter -= 1
 
+    # Metdodo per la colorazione del display del sensehat
     def show_temperature(self, temp_value):
 
-        global calib
+        global calib_temp
 
         # Calcolo il livello di colore (tra 1 e 255) proporzionale alla temperatura rilevata
-        pixel_light = int( (((temp_value - calib.pmin) / (calib.pmax - calib.pmin)) * 255) // 1)
+        pixel_light = int( (((temp_value - calib_temp.pmin) / (calib_temp.pmax - calib_temp.pmin)) * 255) // 1)
         if (pixel_light > 255):
             pixel_light = 255
         if (pixel_light < 0):
@@ -184,6 +280,7 @@ class StartThread(threading.Thread):
         # Blu = freddo; Rosso = caldo
         X = [pixel_light, 0, 255 - pixel_light]
 
+        # Matrice "tinta unita"
         one_level = [
         X, X, X, X, X, X, X, X,
         X, X, X, X, X, X, X, X,
@@ -198,15 +295,16 @@ class StartThread(threading.Thread):
         # Coloro il display in tinta unita
         sense.set_pixels(one_level)
 
-# Creo la lista per la storicizzazione delle misure
-measure_list =  []
+# Inizializzo le costanti del JSON
+kc = KeysConstant()
 
 # Eseguo la calibrazione iniziale
-calib = Calibration("SenseHat-Temp")
+calib_temp = Calibration("SenseHat-Temp")
+measure_list = MeasureList()
 
 # Create new threads
-th_acquisition = StartThread(1, "Acquisition", 0.5, 500)
-th_process = StartThread(2, "Process", 5, 50)
+th_acquisition = StartThread(1, "Acquisition", 5, 500)
+th_process = StartThread(2, "Process", 10, 50)
 
 # Start new Threads
 th_acquisition.start()
