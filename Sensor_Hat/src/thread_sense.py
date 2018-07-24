@@ -259,6 +259,8 @@ class StartThread(threading.Thread):
             main_dic[kc.key_qos] = "good"
             main_dic[kc.key_values] = measure_list.json_dictionary()
 
+            measure_list.clear_list()
+
             print("")
             print("************************")
             print(str(json.dumps(main_dic,
