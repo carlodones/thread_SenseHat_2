@@ -249,6 +249,10 @@ class StartThread(threading.Thread):
                 meas.channel = meas.channel + 10
                 measure_list.add_measure(meas)
 
+                # Per la temperatura, coloro il display in funzione della media rilevata
+                if (meas.channel == 11):
+                    self.show_temperature(meas.value)
+
             # Genero il JSON
             main_dic = {}
             main_dic[kc.key_timestamp] = time.time()
@@ -260,9 +264,6 @@ class StartThread(threading.Thread):
             print(str(json.dumps(main_dic,
                       indent=4, sort_keys=True,
                       separators=(',', ': '), ensure_ascii=False)))
-
-            # Coloro il display in funzione della media rilevata
-            self.show_temperature(meas.value)
 
             time.sleep(delay)
 
