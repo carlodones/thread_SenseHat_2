@@ -147,6 +147,7 @@ class StartThread(threading.Thread):
             val_count = 0
             val_tot = 0
             val_ts = 0
+            val_avg = 0
 
             # Estraggo le misure e calcolo la media
             for mis in measure_list:
@@ -159,7 +160,10 @@ class StartThread(threading.Thread):
                     val_tot = val_tot + mis.value
                     mis.processed = 1
 
-            val_avg = val_tot / val_count
+            if (val_count > 0):
+                val_avg = val_tot / val_count
+            else:
+                val_avg = 0
 
             # Stampo il valore della media
             print("TS: <" + str(val_ts) + ">; AVG:<" + str(val_avg)+ ">")
