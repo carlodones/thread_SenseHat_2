@@ -180,7 +180,7 @@ class StartThread(threading.Thread):
         global calib
 
         # Calcolo il livello di colore (tra 1 e 255) proporzionale alla temperatura rilevata
-        pixel_light = int( (((temp_value - calib.pmin) / (calib.pmax - self.pmin)) * 255) // 1)
+        pixel_light = int( (((temp_value - calib.pmin) / (calib.pmax - calib.pmin)) * 255) // 1)
         if (pixel_light > 255):
             pixel_light = 255
         if (pixel_light < 0):
