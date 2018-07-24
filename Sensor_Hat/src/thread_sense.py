@@ -13,18 +13,29 @@ orange = (255, 255, 0)
 white = (255,255,255)
 blue = (0, 0, 255)
 
-X = [0, 0, 255]  # Blu
-O = [0, 0, 0]  # Black
+G = [0, 127, 0]  # Green
+R = [127, 0, 0]  # Red
 
-alt_sign = [
-O, O, O, X, X, O, O, O,
-O, O, X, O, O, X, O, O,
-O, X, O, O, O, X, X, O,
-X, O, O, O, X, O, O, X,
-X, O, O, X, O, O, O, X,
-O, X, X, O, O, O, X, O,
-O, O, X, O, O, X, O, O,
-O, O, O, X, X, O, O, O
+green_sign = [
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G,
+G, G, G, G, G, G, G, G
+]
+
+red_sign = [
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R, 
+R, R, R, R, R, R, R, R
 ]
 
 exit_flag = (0)
@@ -77,12 +88,13 @@ class TestThread(threading.Thread):
     def acq_sensori(self, threadName, delay, counter):
 
         global exit_flag
+        global red_sign
 
         while counter:
             sense.stick.direction_middle = pushed_middle
 
             if (exit_flag == 1):
-                sense.set_pixels(alt_sign)
+                sense.set_pixels(red_sign)
                 threadName.exit()
 
             time.sleep(delay)
@@ -147,7 +159,7 @@ def print_counter(threadName, delay, counter):
 
 
 # Create new threads
-thread1 = TestThread(1, "Thread 1", 1000)
+thread1 = TestThread(1, "Thread 1", 200)
 # thread2 = TestThread(2, "Thread 2", 50)
 # thread3 = TestThread(3, "Thread 3", 50)
 
@@ -158,4 +170,6 @@ thread1.start()
 thread1.join()
 # thread2.join()
 # thread3.join()
+
+sense.set_pixels(green_sign)
 print("Termine programma")
