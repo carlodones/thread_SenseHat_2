@@ -203,7 +203,7 @@ class StartThread(threading.Thread):
 
             # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
             t = sense.get_temperature()
-            p = sense.get_humidity()
+            p = sense.get_pressure()
 
             # Arrotondamento ad una cifra decimale
             t = round(t, 2)
@@ -306,7 +306,7 @@ measure_list = MeasureList()
 
 # Create new threads
 th_acquisition = StartThread(1, "Acquisition", 5, 500)
-th_process = StartThread(2, "Process", 10, 50)
+th_process = StartThread(2, "Process", 20, 50)
 
 # Start new Threads
 th_acquisition.start()
