@@ -160,7 +160,7 @@ class StartThread(threading.Thread):
                 val_avg = 0
 
             # Stampo il valore della media
-            print("TS: <" + str(val_ts) + ">; TOT:<" + str(val_tot)+ ">; AVG:<" + str(val_avg)+ ">")
+            print("TS: <" + str(val_ts) + ">; NUM:<" + str(val_count)+ ">; AVG:<" + str(val_avg)+ ">")
 
             # Coloro il display in funzione della media rilevata
             self.show_temperature(val_avg)
