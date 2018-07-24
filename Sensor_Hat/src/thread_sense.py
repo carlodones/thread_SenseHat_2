@@ -183,7 +183,7 @@ class StartThread(threading.Thread):
             pixel_light = 0
 
         # Creo il codice colore di riferimento:
-        # Blu = più freddo; Rosso = più caldo
+        # Blu = freddo; Rosso = caldo
         X = [pixel_light, 0, 255 - pixel_light]
 
         one_level = [
