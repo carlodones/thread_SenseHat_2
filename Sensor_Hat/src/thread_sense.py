@@ -18,23 +18,23 @@ R = [127, 0, 0]  # Red
 
 green_sign = [
 G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
-G, G, G, G, G, G, G, G,
+G, G, G, R, R, G, G, G,
+G, G, R, G, G, R, G, G,
+G, R, G, G, G, G, R, G,
+G, R, G, G, G, G, R, G,
+G, G, R, G, G, R, G, G,
+G, G, G, R, R, G, G, G,
 G, G, G, G, G, G, G, G
 ]
 
 red_sign = [
 R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
-R, R, R, R, R, R, R, R, 
+R, G, R, R, R, R, G, R, 
+R, R, G, R, R, G, R, R, 
+R, R, R, G, G, R, R, R, 
+R, R, R, G, G, R, R, R, 
+R, R, G, R, R, G, R, R, 
+R, G, R, R, R, R, G, R, 
 R, R, R, R, R, R, R, R
 ]
 
