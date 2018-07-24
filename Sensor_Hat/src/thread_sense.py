@@ -37,8 +37,6 @@ class Measure(object):
         self.timestamp = timestamp
         self.processed = processed
 
-measure_list =  []
-
 # Classe per eseguire la calibrazione iniziale
 class Calibration():
 
@@ -71,10 +69,6 @@ class Calibration():
         self.pmax = avg_temp + 1
         self.pmin = avg_temp - 1
         print ("Min: <" + str(self.pmin)+ ">; Max: <" +str(self.pmax)+ ">")
-
-
-# Eseguo la calibrazione iniziale
-calib = Calibration("SenseHat-Temp")
 
 class StartThread(threading.Thread):
 
@@ -166,7 +160,7 @@ class StartThread(threading.Thread):
                 val_avg = 0
 
             # Stampo il valore della media
-            print("TS: <" + str(val_ts) + ">; AVG:<" + str(val_avg)+ ">")
+            print("TS: <" + str(val_ts) + ">; TOT:<" + str(val_tot)+ ">; AVG:<" + str(val_avg)+ ">")
 
             # Coloro il display in funzione della media rilevata
             self.show_temperature(val_avg)
@@ -203,6 +197,12 @@ class StartThread(threading.Thread):
         
         # Coloro il display in tinta unita
         sense.set_pixels(one_level)
+
+# Creo la lista per la storicizzazione delle misure
+measure_list =  []
+
+# Eseguo la calibrazione iniziale
+calib = Calibration("SenseHat-Temp")
 
 # Create new threads
 th_acquisition = StartThread(1, "Acquisition", 0.5, 500)
