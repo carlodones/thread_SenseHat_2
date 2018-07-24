@@ -243,7 +243,7 @@ class StartThread(threading.Thread):
                 meas = measure_list.avg_by_channel(ch)
 
                 # Stampo il valore della media
-                print("TS: <" + str(meas.timestamp) + ">; NUM:<" + str(meas.count)+ ">; AVG:<" + str(meas.value)+ ">")
+                print("TS:<" + str(meas.timestamp) + ">; NUM:<" + str(meas.count)+ ">; AVG:<" + str(meas.value)+ ">")
 
                 # Aggiorno il codice canale e aggiungo la media alla lista misure
                 meas.channel = meas.channel + 10
