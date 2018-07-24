@@ -67,7 +67,7 @@ class Calibration():
         print ("Avg: <" + str(avg_temp)+ ">")
 
         # Fisso i valori di riferimento del range di temperatura
-        # (+/- 1 °C rispetto alla temperatura di calibrazione)
+        # (+/- 1C rispetto alla temperatura di calibrazione)
         self.pmax = avg_temp + 1
         self.pmin = avg_temp - 1
         print ("Min: <" + str(self.pmin)+ ">; Max: <" +str(self.pmax)+ ">")
