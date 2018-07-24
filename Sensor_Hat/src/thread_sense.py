@@ -34,7 +34,6 @@ def pushed_middle(event):
     if event.action == ACTION_PRESSED:
         print("Button pressed")
         exit_flag = 1
-        
 
 class TestThread(threading.Thread):
 
@@ -80,6 +79,8 @@ class TestThread(threading.Thread):
         global exit_flag
 
         while counter:
+            sense.stick.direction_middle = pushed_middle
+
             if (exit_flag == 1):
                 sense.set_pixels(alt_sign)
                 threadName.exit()
