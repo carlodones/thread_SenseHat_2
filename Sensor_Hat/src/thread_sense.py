@@ -5,17 +5,10 @@ from random import randint
 from sense_hat import SenseHat, ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 sense = SenseHat()
 
-#Define the colours red and green
-red = (255, 0, 0)
-green = (0, 255, 0)
-black = (0,0,0)
-orange = (255, 255, 0)
-white = (255,255,255)
-blue = (0, 0, 255)
-
 G = [0, 127, 0]  # Green
 R = [127, 0, 0]  # Red
 
+# Segno verde: visualizzato al termine del programma
 green_sign = [
 G, G, G, G, G, G, G, G,
 G, G, G, R, R, G, G, G,
@@ -27,77 +20,95 @@ G, G, G, R, R, G, G, G,
 G, G, G, G, G, G, G, G
 ]
 
-red_sign = [
-R, R, R, R, R, R, R, R, 
-R, G, R, R, R, R, G, R, 
-R, R, G, R, R, G, R, R, 
-R, R, R, G, G, R, R, R, 
-R, R, R, G, G, R, R, R, 
-R, R, G, R, R, G, R, R, 
-R, G, R, R, R, R, G, R, 
-R, R, R, R, R, R, R, R
-]
-
 exit_flag = (0)
 
+
+# Alla pressione del pulsante del sense-hat il programma termina
 def pushed_middle(event):
     global exit_flag
     if event.action == ACTION_PRESSED:
         print("Button pressed")
         exit_flag = 1
 
-class TestThread(threading.Thread):
+class Measure(object):
+    def __init__(self, channel, value, timestamp, processed):
+        self.channel = channel
+        self.value = value
+        self.timestamp = timestamp
+        self.processed = processed
 
-    max_temp = 100
-    min_temp = 0
-    calib_cycles = 5
+measure_list =  []
 
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
+# Classe per eseguire la calibrazione iniziale
+class Calibration():
+
+    def __init__(self, name, pcycles=5, pmin=0, pmax=100):
         self.name = name
-        self.counter = counter
+        self.pcycles = pcycles
+        self.min = pmin
+        self.pmax = pmax
 
-    def run(self):
+    def calibrate(self):
 
         avg_temp = 0
         calib = 1
 
+        # Avvio fase di calibrazione iniziale: la temperatura media risulta
+        # da una media di 5 rilevazioni della temperatura ambiente
         print("Calibrating " + self.name)
 
-        while (calib <= self.calib_cycles):
+        while (calib <= self.pcycles):
             avg_temp = avg_temp + sense.get_temperature()
             print ("Calibration [" + str(calib) + "]: <" + str(avg_temp / calib) + ">")
             calib = calib + 1
             time.sleep(1)
 
-        avg_temp = avg_temp / self.calib_cycles
+        avg_temp = avg_temp / self.pcycles
         print ("Avg: <" + str(avg_temp)+ ">")
 
-        self.max_temp = avg_temp + 1
-        self.min_temp = avg_temp - 1
-        print ("Min: <" + str(self.min_temp)+ ">; Max: <" +str(self.max_temp)+ ">")
+        # Fisso i valori di riferimento del range di temperatura
+        # (+/- 1 °C rispetto alla temperatura di calibrazione)
+        self.pmax = avg_temp + 1
+        self.pmin = avg_temp - 1
+        print ("Min: <" + str(self.pmin)+ ">; Max: <" +str(self.pmax)+ ">")
 
+
+# Eseguo la calibrazione iniziale
+calib = Calibration("SenseHat-Temp")
+
+class StartThread(threading.Thread):
+
+    def __init__(self, threadID, name, delay, counter):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+        self.delay = delay
+
+    def run(self):
+
+        # Avvio il thread di acquisizione
         print("Starting " + self.name)
         if self.threadID == 1:
-            self.acq_sensori(self.name, 0.5, self.counter)
+            self.read_sesors(self.name, self.delay, self.counter)
+        if self.threadID == 2:
+            self.parse_measures(self.name, self.delay, self.counter)
+        print("Started " + self.name)
 
-        print("Finished " + self.name)
-
-
-    def acq_sensori(self, threadName, delay, counter):
+    # Thread per la lettura dei sensori
+    def read_sesors(self, threadName, delay, counter):
 
         global exit_flag
-        global red_sign
+        global measure_list
 
         while counter:
+            # Verifico se ho premuto il pulsante di stop
             sense.stick.direction_middle = pushed_middle
 
+            # Se ho premuto il pulsante, esco e visualizzo
+            # il segno verde
             if (exit_flag == 1):
-                sense.set_pixels(red_sign)
                 threadName.exit()
-
-            time.sleep(delay)
 
             # Lettura dai sensori del SenseHat acquisizione Temperatura, Pressione, Humidity
             t = sense.get_temperature()
@@ -105,20 +116,74 @@ class TestThread(threading.Thread):
             # Arrotondamento ad una cifra decimale
             t = round(t, 2)
 
-            # Coloro il display in funzione della T rilevata
-            self.show_temperature(t)
+            # Rilevo il timestamp
+            ts = time.time()
+
+            mis = Measure(1, t, ts, 0)
+
+            # Aggiungo alla lista misure
+            measure_list.append(mis)
+
+            time.sleep(delay)
 
             counter -= 1
 
+    # Thread per il processamento delle misure
+    def parse_measures(self, threadName, delay, counter):
+
+        global exit_flag
+        global measure_list
+
+        while counter:
+            # Verifico se ho premuto il pulsante di stop
+            sense.stick.direction_middle = pushed_middle
+
+            # Se ho premuto il pulsante, esco e visualizzo
+            # il segno verde
+            if (exit_flag == 1):
+                threadName.exit()
+
+            # Numero misure contate
+            val_count = 0
+            val_tot = 0
+            val_ts = 0
+
+            # Estraggo le misure e calcolo la media
+            for mis in measure_list:
+                if (mis.processed == 1):
+                    measure_list.remove(mis)
+                else:
+                    if (val_ts == 0):                    
+                        val_ts = mis.timestamp
+                    val_count = val_count + 1
+                    val_tot = val_tot + mis.value
+                    mis.processed = 1
+
+            val_avg = val_tot / val_count
+
+            # Stampo il valore della media
+            print("TS: <" + str(val_ts) + ">; AVG:<" + str(val_avg)+ ">")
+
+            # Coloro il display in funzione della media rilevata
+            self.show_temperature(val_avg)
+
+            time.sleep(delay)
+
+            counter -= 1
 
     def show_temperature(self, temp_value):
 
-        pixel_light = int( (((temp_value - self.min_temp) / (self.max_temp - self.min_temp)) * 255) // 1)
+        global calib
+
+        # Calcolo il livello di colore (tra 1 e 255) proporzionale alla temperatura rilevata
+        pixel_light = int( (((temp_value - calib.pmin) / (calib.pmax - self.pmin)) * 255) // 1)
         if (pixel_light > 255):
             pixel_light = 255
         if (pixel_light < 0):
             pixel_light = 0
 
+        # Creo il codice colore di riferimento:
+        # Blu = più freddo; Rosso = più caldo
         X = [pixel_light, 0, 255 - pixel_light]
 
         one_level = [
@@ -132,44 +197,19 @@ class TestThread(threading.Thread):
         X, X, X, X, X, X, X, X
         ]
         
+        # Coloro il display in tinta unita
         sense.set_pixels(one_level)
 
-
-""" 
-#  DEFINIZIONE  THREAD  ID = 2
-#  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
-def print_time(threadName, delay, counter):
-    while counter:
-        if exit_flag:
-            threadName.exit()
-        time.sleep(delay)
-        print("%s: %s" % (threadName, time.ctime(time.time())))
-        counter -= 1
-
-#  DEFINIZIONE  THREAD  ID = 3
-#  Dichiarazione di tutte le azioni che devono essere svolte dal THREAD
-def print_counter(threadName, delay, counter):
-    while counter:
-        if exit_flag:
-            threadName.exit()
-        time.sleep(delay)
-        print(threadName, "ciclo", str(counter))
-        counter -= 1 
-"""
-
-
 # Create new threads
-thread1 = TestThread(1, "Thread 1", 200)
-# thread2 = TestThread(2, "Thread 2", 50)
-# thread3 = TestThread(3, "Thread 3", 50)
+th_acquisition = StartThread(1, "Acquisition", 0.5, 500)
+th_process = StartThread(2, "Process", 5, 50)
 
 # Start new Threads
-thread1.start()
-# thread2.start()
-# thread3.start()
-thread1.join()
-# thread2.join()
-# thread3.join()
+th_acquisition.start()
+th_process.start()
+
+th_acquisition.join()
+th_process.join()
 
 sense.set_pixels(green_sign)
 print("Termine programma")
