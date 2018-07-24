@@ -302,6 +302,7 @@ class StartThread(threading.Thread):
 
 # Inizializzo le costanti del JSON
 kc = KeysConstant()
+sense.set_pixels(green_sign)
 
 # Eseguo la calibrazione iniziale
 calib_temp = Calibration("SenseHat-Temp")
