@@ -1,4 +1,5 @@
-import mod_constants
+import mod_config
+
 
 # Classe per la memorizzazione di una singola misura
 class Measure(object):
@@ -16,12 +17,11 @@ class MeasureList(object):
     def __init__(self):
         pass
 
-    global mkc
     plist = []
 
     # Aggiunge alla lista una misura dati i valori
     def add_details(self, channel, value, timestamp):
-        meas = Measure(channel, value, timestamp)
+        meas = Measure(id, channel, value, timestamp)
         self.plist.append(meas)
 
     # Aggiunge alla lista una misura
@@ -37,22 +37,32 @@ class MeasureList(object):
                 meas.read = 1
         return part_list
 
-    # Ritorna lista delle misure per singolo canale e stato
-    def json_dictionary(self):
+    # Ritorna lista delle misure per singolo canale
+    def list_by_id(self, id):
+        part_list = []
+        for meas in self.plist:
+            if ((meas.id == id) & (meas.read == 0)):
+                part_list.append(meas)
+                meas.read = 1
+        return part_list
+
+    # Ritorna lista delle misure per singolo id e stato
+    def json_dictionary(self, cfg_mgr):
         dic_list = []
+        key_dict = cfg_mgr.get_MQTT_keys_dict()
         for meas in self.plist:
             elem_dic = {}
             if (meas.json == 0):
-                elem_dic[mkc.key_payload] = meas.value
-                elem_dic[mkc.key_address] = meas.channel
-                elem_dic[mkc.key_timestamp] = meas.timestamp
-                elem_dic[mkc.key_qos] = "good"
+                elem_dic[key_dict.get('payload')] = meas.value
+                elem_dic[key_dict.get('address')] = meas.id
+                elem_dic[key_dict.get('timestamp')] = meas.timestamp
+                elem_dic[key_dict.get('qos')] = "good"
                 dic_list.append(elem_dic)
                 meas.json = 1
         return dic_list
 
     # Ritorna media delle misure per singolo canale e stato
-    def avg_by_channel(self, channel):
+    def avg_by_channel(self, channel, source_channel):
 
         # Numero misure contate
         val_count = 0
@@ -62,7 +72,7 @@ class MeasureList(object):
 
         # Estraggo le misure e calcolo la media
         for meas in self.plist:
-            if ((meas.channel == channel) & (meas.average == 0)):
+            if ((meas.channel == source_channel) & (meas.average == 0)):
                 if (val_ts == 0):
                     val_ts = meas.timestamp
                 val_count = val_count + 1
@@ -80,6 +90,12 @@ class MeasureList(object):
         return meas_avg
 
     # Elimina gli elementi processati
+    def clear_list_by_channel(self, channel):
+        for meas in self.plist:
+            if (meas.channel == channel):
+                self.plist.remove(meas)
+
+    # Elimina gli elementi processati
     def clear_list(self):
         for meas in self.plist:
             if (meas.json == 1):
@@ -88,6 +104,3 @@ class MeasureList(object):
     # Ritorna la lista completa
     def list(self):
         return self.plist
-
-# Inizializzo le costanti del JSON
-mkc = mod_constants.MQTTKeysConstant()
